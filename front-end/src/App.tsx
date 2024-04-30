@@ -6,6 +6,7 @@ import LoginPage from "./pages/LoginPage";
 import SignUpPage from "./pages/SignUpPage";
 import ViewAssignment from "./pages/ViewAssignment";
 import SubmitAssignment from "./pages/SubmitAssignment";
+import ViewSubmission from "./pages/ViewSubmission";
 
 function App() {
   const auth = useAuth();
@@ -18,6 +19,7 @@ function App() {
           element={auth.isLoggedIn ? <Dashboard /> : <Navigate to={"/login"} />}
         />
         <Route path="/view/assignment" element={<ViewAssignment />} />
+        <Route path="/view/submission" element={<ViewSubmission />} />
         <Route path="/submit/assignment" element={<SubmitAssignment />} />
         <Route
           path="/login"
