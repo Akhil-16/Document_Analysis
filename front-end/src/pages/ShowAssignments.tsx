@@ -55,7 +55,7 @@ const ShowAssignments = () => {
                 <tr>
                   <th className="border border-black">#</th>
                   <th className="border border-black">Name</th>
-                  <th className="border border-black max-w-16">Copy</th>
+                  <th className="border border-black max-w-16">Link</th>
                   <th className="border border-black max-w-16">View</th>
                 </tr>
               </thead>
