@@ -1,8 +1,10 @@
 import { Button } from "@mui/material";
 import { ChangeEvent, FormEvent, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useAuth, useMessage } from "../utils";
 import { FirebaseError } from "firebase/app";
+import { addDoc, collection, doc, setDoc } from "firebase/firestore";
+import { db } from "../firebase";
 
 const SignUpPage = () => {
   const [name, setName] = useState("");
@@ -14,12 +16,25 @@ const SignUpPage = () => {
 
   const auth = useAuth();
   const showMessage = useMessage();
+  const navigate = useNavigate();
 
   const handleOnSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setLoading(true);
     try {
-      await auth.signUp(email, password);
+      const creds = await auth.signUp(email, password);
+      await setDoc(doc(db, "users", creds.user.uid), {
+        name,
+        subjectName,
+        email,
+      });
+      showMessage(
+        "Account Created Successfully! Redirecting to login",
+        "success",
+      );
+      setTimeout(() => {
+        navigate("/login");
+      }, 1000);
     } catch (err) {
       if (err instanceof FirebaseError) {
         if (err.code === "auth/user-not-found") {
