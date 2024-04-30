@@ -77,7 +77,7 @@ const LoginPage = () => {
           </Button>
           <div className="flex items-center justify-center gap-2 text-bgColor">
             Don't have an account already?{" "}
-            <Button onClick={() => navigate("/signup")}>Sign Up</Button>
+            <Button onClick={() => navigate("/sign-up")}>Sign Up</Button>
           </div>
         </div>
       </section>
