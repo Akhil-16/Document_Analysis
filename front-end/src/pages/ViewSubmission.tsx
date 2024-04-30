@@ -7,6 +7,8 @@ import { doc, getDoc } from "firebase/firestore";
 import { db, storage } from "../firebase";
 import { calcGrade } from "../utils";
 import { getDownloadURL, ref } from "firebase/storage";
+import { Button, Divider, Typography } from "@mui/material";
+import { ImageBg } from "../components/ImageBg";
 
 const ViewSubmission = () => {
   const params = useLocation();
@@ -57,50 +59,65 @@ const ViewSubmission = () => {
 
   return (
     <>
+      <section className="relative flex h-screen w-[calc(100%)] flex-col items-center justify-center bg-bgColor">
+        <ImageBg />
+        <div className="z-10 flex h-[94%] w-11/12 flex-col justify-center rounded-md bg-white p-4 text-black overflow-y-auto">
+          <Typography variant="h4" className="text-center">
+            View Submission
+          </Typography>
+          <Divider className="my-4" />
+          <table className="w-full">
+            <tr>
+              <th className="border border-black w-[15%] p-2">Name</th>
+              <td className="border border-black p-2 text-center">
+                {details.name}
+              </td>
+            </tr>
+            <tr>
+              <th className="border border-black p-2">Email</th>
+              <td className="border border-black p-2 text-center">
+                {details.email}
+              </td>
+            </tr>
+            <tr>
+              <th className="border border-black p-2">Original Submission</th>
+              <td className="border border-black p-2 text-center">
+                <a href={details.file} target="_blank">
+                  <Button>Download</Button>
+                </a>
+              </td>
+            </tr>
+            <tr>
+              <th className="border border-black p-2">
+                Over All Grade ( out of 100 )
+              </th>
+              <td className="border border-black p-2 text-center">
+                {calcGrade(details.grades!)}
+              </td>
+            </tr>
+            {[...new Array(5)].map((_, index) => {
+              return (
+                <Fragment key={index}>
+                  <tr>
+                    <th className="border border-black p-2" rowSpan={2}>
+                      {details.metrics![index]}
+                    </th>
+                    <td className="border border-black p-2 text-center">
+                      {details.grades![index]}
+                    </td>
+                  </tr>
+                  <tr>
+                    <td className="border border-black p-2 text-center">
+                      {details.remarks![index]}
+                    </td>
+                  </tr>
+                </Fragment>
+              );
+            })}
+          </table>
+        </div>
+      </section>
       <div>ViewSubmission</div>
-      <table>
-        <tbody>
-          <tr>
-            <th className="border border-black">Name</th>
-            <td className="border border-black">{details.name}</td>
-          </tr>
-          <tr>
-            <th className="border border-black">Email</th>
-            <td className="border border-black">{details.email}</td>
-          </tr>
-          <tr>
-            <th className="border border-black">Original Submission</th>
-            <td className="border border-black">{details.file}</td>
-          </tr>
-          <tr>
-            <th className="border border-black">
-              Over All Grade ( out of 100 )
-            </th>
-            <td className="border border-black">
-              {calcGrade(details.grades!)}
-            </td>
-          </tr>
-          {[...new Array(5)].map((_, index) => {
-            return (
-              <Fragment key={index}>
-                <tr>
-                  <th className="border border-black" rowSpan={2}>
-                    {details.metrics![index]}
-                  </th>
-                  <td className="border border-black">
-                    {details.grades![index]}
-                  </td>
-                </tr>
-                <tr>
-                  <td className="border border-black">
-                    {details.remarks![index]}
-                  </td>
-                </tr>
-              </Fragment>
-            );
-          })}
-        </tbody>
-      </table>
     </>
   );
 };
