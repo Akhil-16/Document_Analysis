@@ -16,7 +16,7 @@ export type SMMessageContext = {
   ): void;
 };
 
-export type FetchedAssignemnt = {
+export type FetchedAssignment = {
   createdBy: string;
   uid: string;
   name: string;

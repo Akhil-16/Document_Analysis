@@ -5,6 +5,7 @@ import { useAuth } from "./utils";
 import Dashboard from "./pages/Dashboard";
 import LoginPage from "./pages/LoginPage";
 import SignUpPage from "./pages/SignUpPage";
+import ViewAssignment from "./pages/ViewAssignment";
 
 function App() {
   const auth = useAuth();
@@ -16,6 +17,7 @@ function App() {
           path="/"
           element={auth.isLoggedIn ? <Dashboard /> : <Navigate to={"/login"} />}
         />
+        <Route path="/view/assignment" element={<ViewAssignment />} />
         <Route
           path="/login"
           element={auth.isLoggedIn ? <Navigate to={"/"} /> : <LoginPage />}

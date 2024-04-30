@@ -1,13 +1,16 @@
 import { useEffect, useState } from "react";
-import { FetchedAssignemnt } from "../types";
+import { FetchedAssignment } from "../types";
 import { collection, onSnapshot, query, where } from "firebase/firestore";
 import { useAuth } from "../utils";
 import { db } from "../firebase";
+import { Button } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 
 const ShowAssignments = () => {
-  const [assignemnts, setAssignments] = useState<FetchedAssignemnt[]>([]);
+  const [assignemnts, setAssignments] = useState<FetchedAssignment[]>([]);
 
   const auth = useAuth();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const q = query(
@@ -16,9 +19,9 @@ const ShowAssignments = () => {
     );
 
     const unsub = onSnapshot(q, (snap) => {
-      const _assingments: FetchedAssignemnt[] = [];
+      const _assingments: FetchedAssignment[] = [];
       snap.docs.forEach((doc) => {
-        _assingments.push({ ...doc.data(), uid: doc.id } as FetchedAssignemnt);
+        _assingments.push({ ...doc.data(), uid: doc.id } as FetchedAssignment);
       });
       setAssignments(_assingments);
     });
@@ -34,6 +37,7 @@ const ShowAssignments = () => {
           <tr>
             <th className="border border-black">Name</th>
             <th className="border border-black">uid</th>
+            <th className="border border-black">action</th>
           </tr>
         </thead>
         <tbody>
@@ -42,6 +46,15 @@ const ShowAssignments = () => {
               <tr key={assignment.uid}>
                 <th className="border border-black">{assignment.name}</th>
                 <th className="border border-black">{assignment.uid}</th>
+                <th className="border border-black">
+                  <Button
+                    onClick={() => {
+                      navigate(`/view/assignment?uid=${assignment.uid}`);
+                    }}
+                  >
+                    View
+                  </Button>
+                </th>
               </tr>
             );
           })}
