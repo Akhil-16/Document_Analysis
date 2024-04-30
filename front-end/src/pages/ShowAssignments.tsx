@@ -53,29 +53,23 @@ const ShowAssignments = () => {
             <table className="text-black">
               <thead>
                 <tr>
+                  <th className="border border-black">#</th>
                   <th className="border border-black">Name</th>
-                  <th className="border border-black">uid</th>
-                  <th className="border border-black">action</th>
-                  <th className="border border-black">link</th>
+                  <th className="border border-black max-w-16">Copy</th>
+                  <th className="border border-black max-w-16">View</th>
                 </tr>
               </thead>
               <tbody>
-                {assignemnts.map((assignment) => {
+                {assignemnts.map((assignment, index) => {
                   return (
                     <tr key={assignment.uid}>
-                      <th className="border border-black">{assignment.name}</th>
-                      <th className="border border-black">{assignment.uid}</th>
-                      <th className="border border-black">
-                        <Button
-                          onClick={() => {
-                            const url = `/view/assignment?uid=${assignment.uid}`;
-                            navigate(url);
-                          }}
-                        >
-                          View
-                        </Button>
+                      <td className="border border-black text-center">
+                        {index + 1}
+                      </td>
+                      <th className="border border-black text-center">
+                        {assignment.name}
                       </th>
-                      <th className="border border-black">
+                      <th className="border border-black max-w-16">
                         <Button
                           onClick={() => {
                             const currentUrl = window.location.href;
@@ -87,8 +81,22 @@ const ShowAssignments = () => {
                               showMessage("Copied to clipboard!");
                             });
                           }}
+                          variant="outlined"
+                          className="m-2"
                         >
                           Copy
+                        </Button>
+                      </th>
+                      <th className="border border-black max-w-16">
+                        <Button
+                          onClick={() => {
+                            const url = `/view/assignment?uid=${assignment.uid}`;
+                            navigate(url);
+                          }}
+                          variant="contained"
+                          className="m-2"
+                        >
+                          View
                         </Button>
                       </th>
                     </tr>
