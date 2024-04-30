@@ -6,3 +6,5 @@ export const appTheme = createTheme({
     primary: purple,
   },
 });
+
+export const backendUri = import.meta.env.VITE_BACKEND_URI;
