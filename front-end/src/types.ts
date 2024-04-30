@@ -15,3 +15,9 @@ export type SMMessageContext = {
     messageDuration?: number,
   ): void;
 };
+
+export type FetchedAssignemnt = {
+  createdBy: string;
+  uid: string;
+  name: string;
+};
