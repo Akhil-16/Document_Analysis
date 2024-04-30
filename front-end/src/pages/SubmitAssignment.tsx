@@ -65,6 +65,7 @@ const SubmitAssignment = () => {
         file: resp.metadata.fullPath,
         name,
         email,
+        graded: false,
       });
       showMessage("Uploaded successfully!", "success");
       setsubmitted(true);
