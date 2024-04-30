@@ -107,7 +107,7 @@ const SubmitAssignment = () => {
       <>
         <section className="relative flex h-screen w-[calc(100%)] flex-col items-center justify-center bg-bgColor">
           <ImageBg />
-          <div className="z-10 flex h-[94%] w-11/12 flex-col justify-center rounded-md bg-white p-4 text-black">
+          <div className="z-10 flex h-[94%] w-11/12 lg:max-w-[55%] mx-auto flex-col justify-center rounded-md bg-white p-4 text-black">
             <Typography variant="h4" className="text-center">
               Submitted!
             </Typography>
@@ -124,53 +124,55 @@ const SubmitAssignment = () => {
     <>
       <section className="relative flex h-screen w-[calc(100%)] flex-col items-center justify-center bg-bgColor">
         <ImageBg />
-        <div className="z-10 flex h-[94%] w-11/12 flex-col rounded-md bg-white p-4 text-black">
+        <div className="z-10 flex h-[94%] w-11/12 lg:max-w-[25%] mx-auto flex-col rounded-md bg-white p-4 text-black">
           <Typography variant="h4" className="text-center">
             View Assignments
           </Typography>
           <Divider className="my-4" />
-          <Form
-            loading={loading}
-            buttonText="Submit"
-            onSubmit={handleOnSubmit}
-            initialValues={{
-              email: "",
-              password: "",
-            }}
-            formFields={[
-              {
-                label: "Enter your name",
-                name: "name",
-                type: "text",
-              },
-              {
-                label: "Enter your email",
-                name: "email",
-                type: "text",
-              },
-            ]}
-            extendForm={
-              <>
-                <Button
-                  component="label"
-                  role={undefined}
-                  variant="contained"
-                  tabIndex={-1}
-                  startIcon={<CloudUpload />}
-                >
-                  Upload file
-                  <VisuallyHiddenInput
-                    accept="application/pdf"
-                    className="my-4"
-                    type="file"
-                    onChange={handleFileChange}
-                  />
-                </Button>
-                <br />
-                {file && <div className="my-2 font-bold">{file.name}</div>}
-              </>
-            }
-          />
+          <div className="w-full h-full flex flex-col justify-center items-center">
+            <Form
+              loading={loading}
+              buttonText="Submit"
+              onSubmit={handleOnSubmit}
+              initialValues={{
+                email: "",
+                password: "",
+              }}
+              formFields={[
+                {
+                  label: "Enter your name",
+                  name: "name",
+                  type: "text",
+                },
+                {
+                  label: "Enter your email",
+                  name: "email",
+                  type: "text",
+                },
+              ]}
+              extendForm={
+                <>
+                  <Button
+                    component="label"
+                    role={undefined}
+                    variant="contained"
+                    tabIndex={-1}
+                    startIcon={<CloudUpload />}
+                  >
+                    Upload file
+                    <VisuallyHiddenInput
+                      accept="application/pdf"
+                      className="my-4"
+                      type="file"
+                      onChange={handleFileChange}
+                    />
+                  </Button>
+                  <br />
+                  {file && <div className="my-2 font-bold">{file.name}</div>}
+                </>
+              }
+            />
+          </div>
         </div>
       </section>
     </>

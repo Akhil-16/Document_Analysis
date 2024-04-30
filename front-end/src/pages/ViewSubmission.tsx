@@ -61,11 +61,11 @@ const ViewSubmission = () => {
     <>
       <section className="relative flex h-screen w-[calc(100%)] flex-col items-center justify-center bg-bgColor">
         <ImageBg />
-        <div className="z-10 flex h-[94%] w-11/12 flex-col justify-center rounded-md bg-white p-4 text-black overflow-y-auto">
-          <Typography variant="h4" className="text-center">
+        <div className="z-10 flex h-[94%] w-11/12 lg:max-w-[55%] mx-auto flex-col items-center justify-center rounded-md bg-white p-4 text-black overflow-y-auto">
+          <Typography variant="h4" className="w-full text-center">
             View Submission
           </Typography>
-          <Divider className="my-4" />
+          <Divider className="my-4 w-full" />
           <table className="w-full">
             <tr>
               <th className="border border-black w-[15%] p-2">Name</th>
@@ -117,7 +117,6 @@ const ViewSubmission = () => {
           </table>
         </div>
       </section>
-      <div>ViewSubmission</div>
     </>
   );
 };
