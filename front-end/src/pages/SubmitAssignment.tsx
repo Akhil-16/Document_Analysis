@@ -3,12 +3,29 @@ import { useLocation } from "react-router-dom";
 import { FetchedAssignment } from "../types";
 import LoadingPage from "./LoadingPage";
 import NotFound from "./NotFound";
-import { doc, getDoc } from "firebase/firestore";
+import { addDoc, doc, getDoc, collection } from "firebase/firestore";
 import { db, storage } from "../firebase";
 import { useAuth, useMessage } from "../utils";
 import { FirebaseError } from "firebase/app";
-import { Button } from "@mui/material";
+import { Button, Divider, Typography } from "@mui/material";
 import { ref, uploadBytes } from "firebase/storage";
+import { ImageBg } from "../components/ImageBg";
+import { Form } from "../components/Form";
+import { CloudUpload } from "@mui/icons-material";
+import { styled } from "@mui/material/styles";
+
+const VisuallyHiddenInput = styled("input")({
+  clip: "rect(0 0 0 0)",
+  clipPath: "inset(50%)",
+  height: 1,
+  overflow: "hidden",
+  position: "absolute",
+  bottom: 0,
+  left: 0,
+  whiteSpace: "nowrap",
+  width: "100%",
+  margin: "2rem",
+});
 
 const SubmitAssignment = () => {
   const params = useLocation();
@@ -20,8 +37,8 @@ const SubmitAssignment = () => {
   const [initLoading, setinitLoading] = useState(false);
   const [loading, setloading] = useState(false);
   const [details, setDetails] = useState<FetchedAssignment | null>(null);
+  const [submitted, setsubmitted] = useState(false);
 
-  const auth = useAuth();
   const showMessage = useMessage();
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -48,8 +65,7 @@ const SubmitAssignment = () => {
     console.log(uid);
   }, [uid]);
 
-  const handleOnSubmit = async (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  const handleOnSubmit = async ({ name, email }: Record<string, string>) => {
     if (!file) {
       showMessage("Please select a file to upload.", "error");
       return;
@@ -59,12 +75,21 @@ const SubmitAssignment = () => {
     try {
       console.log(details);
       const storageRef = ref(storage, `${details!.uid}/${"assignment"}.pdf`);
-      await uploadBytes(storageRef, file);
+      const resp = await uploadBytes(storageRef, file);
+      await addDoc(collection(db, "submissions"), {
+        assignment: details!.uid,
+        file: resp.metadata.fullPath,
+        name,
+        email,
+        graded: false,
+      });
       showMessage("Uploaded successfully!", "success");
+      setsubmitted(true);
     } catch (err) {
       if (err instanceof FirebaseError) {
         showMessage(err.message, "error");
       }
+      console.log(err);
     }
     setloading(false);
   };
@@ -77,39 +102,77 @@ const SubmitAssignment = () => {
     return <NotFound />;
   }
 
+  if (submitted) {
+    return (
+      <>
+        <section className="relative flex h-screen w-[calc(100%)] flex-col items-center justify-center bg-bgColor">
+          <ImageBg />
+          <div className="z-10 flex h-[94%] w-11/12 flex-col justify-center rounded-md bg-white p-4 text-black">
+            <Typography variant="h4" className="text-center">
+              Submitted!
+            </Typography>
+            <Typography variant="h6" className="text-center">
+              You'll be notified by a mail whenever it's graded!
+            </Typography>
+          </div>
+        </section>
+      </>
+    );
+  }
+
   return (
     <>
-      <div>SubmitAssignment</div>
-      <form onSubmit={handleOnSubmit}>
-        <input
-          type="file"
-          accept="application/pdf"
-          onChange={handleFileChange}
-        />
-        <input
-          type="text"
-          value={email}
-          className="border border-black"
-          onChange={(e: ChangeEvent<HTMLInputElement>) => {
-            e.preventDefault();
-            setEmail(e.currentTarget.value);
-          }}
-        />
-        <br />
-        <input
-          type="text"
-          value={name}
-          className="border border-black"
-          onChange={(e: ChangeEvent<HTMLInputElement>) => {
-            e.preventDefault();
-            setname(e.currentTarget.value);
-          }}
-        />
-        <br />
-        <Button type="submit" variant="contained" disabled={loading}>
-          Submit Assingment
-        </Button>
-      </form>
+      <section className="relative flex h-screen w-[calc(100%)] flex-col items-center justify-center bg-bgColor">
+        <ImageBg />
+        <div className="z-10 flex h-[94%] w-11/12 flex-col rounded-md bg-white p-4 text-black">
+          <Typography variant="h4" className="text-center">
+            View Assignments
+          </Typography>
+          <Divider className="my-4" />
+          <Form
+            loading={loading}
+            buttonText="Submit"
+            onSubmit={handleOnSubmit}
+            initialValues={{
+              email: "",
+              password: "",
+            }}
+            formFields={[
+              {
+                label: "Enter your name",
+                name: "name",
+                type: "text",
+              },
+              {
+                label: "Enter your email",
+                name: "email",
+                type: "text",
+              },
+            ]}
+            extendForm={
+              <>
+                <Button
+                  component="label"
+                  role={undefined}
+                  variant="contained"
+                  tabIndex={-1}
+                  startIcon={<CloudUpload />}
+                >
+                  Upload file
+                  <VisuallyHiddenInput
+                    accept="application/pdf"
+                    className="my-4"
+                    type="file"
+                    onChange={handleFileChange}
+                  />
+                </Button>
+                <br />
+                {file && <div className="my-2 font-bold">{file.name}</div>}
+              </>
+            }
+          />
+        </div>
+      </section>
     </>
   );
 };

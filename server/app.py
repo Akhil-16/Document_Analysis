@@ -1,7 +1,7 @@
 import random
 import string
 
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify
 from flask_cors import CORS, cross_origin
 
 app = Flask(__name__)
@@ -13,7 +13,14 @@ app.config["CORS_HEADERS"] = "Content-Type"
 @cross_origin()
 def generate_random():
     return jsonify(
-        {"uid": "".join(random.choices(string.ascii_letters + string.digits, k=6))}
+        {
+            "uid": "".join(
+                random.choices(
+                    string.ascii_letters + string.digits,
+                    k=6,
+                )
+            )
+        }
     )
 
 
