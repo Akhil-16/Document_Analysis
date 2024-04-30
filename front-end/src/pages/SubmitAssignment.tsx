@@ -3,7 +3,7 @@ import { useLocation } from "react-router-dom";
 import { FetchedAssignment } from "../types";
 import LoadingPage from "./LoadingPage";
 import NotFound from "./NotFound";
-import { doc, getDoc } from "firebase/firestore";
+import { addDoc, doc, getDoc, collection } from "firebase/firestore";
 import { db, storage } from "../firebase";
 import { useAuth, useMessage } from "../utils";
 import { FirebaseError } from "firebase/app";
@@ -20,8 +20,8 @@ const SubmitAssignment = () => {
   const [initLoading, setinitLoading] = useState(false);
   const [loading, setloading] = useState(false);
   const [details, setDetails] = useState<FetchedAssignment | null>(null);
+  const [submitted, setsubmitted] = useState(false);
 
-  const auth = useAuth();
   const showMessage = useMessage();
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -59,12 +59,20 @@ const SubmitAssignment = () => {
     try {
       console.log(details);
       const storageRef = ref(storage, `${details!.uid}/${"assignment"}.pdf`);
-      await uploadBytes(storageRef, file);
+      const resp = await uploadBytes(storageRef, file);
+      await addDoc(collection(db, "submissions"), {
+        assignment: details!.uid,
+        file: resp.metadata.fullPath,
+        name,
+        email,
+      });
       showMessage("Uploaded successfully!", "success");
+      setsubmitted(true);
     } catch (err) {
       if (err instanceof FirebaseError) {
         showMessage(err.message, "error");
       }
+      console.log(err);
     }
     setloading(false);
   };
@@ -75,6 +83,17 @@ const SubmitAssignment = () => {
 
   if (!details) {
     return <NotFound />;
+  }
+
+  if (submitted) {
+    return (
+      <>
+        <h1>
+          You have submitted your assignment! You will get a mail when it has
+          been scored!
+        </h1>
+      </>
+    );
   }
 
   return (
