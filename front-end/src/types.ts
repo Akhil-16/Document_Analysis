@@ -1,3 +1,4 @@
+import * as Yup from "yup";
 import { User, UserCredential } from "firebase/auth";
 
 export type SMAuthContext = {
@@ -33,3 +34,30 @@ export type FetchedSubmission = {
   metrics?: string[];
   remarks?: string[];
 };
+
+export type FormField = {
+  name: string;
+  label: string;
+} & (OtherFormField | OptionFormField);
+
+interface OtherFormField {
+  type: "text" | "password";
+}
+
+export interface AutoCompleteOption {
+  label: string;
+  value: string;
+}
+
+interface OptionFormField {
+  type: "option";
+  choices: AutoCompleteOption[];
+  defaultValue?: AutoCompleteOption;
+}
+
+export type ValidationSchemaInterface = Yup.ObjectSchema<
+  { [key: string]: string },
+  Yup.AnyObject,
+  { [key: string]: undefined },
+  ""
+>;
