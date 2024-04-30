@@ -3,16 +3,8 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { FetchedSubmission } from "../types";
 import LoadingPage from "./LoadingPage";
 import NotFound from "./NotFound";
-import {
-  collection,
-  doc,
-  getDoc,
-  onSnapshot,
-  query,
-  where,
-} from "firebase/firestore";
+import { doc, getDoc } from "firebase/firestore";
 import { db, storage } from "../firebase";
-import { Button } from "@mui/material";
 import { calcGrade } from "../utils";
 import { getDownloadURL, ref } from "firebase/storage";
 
