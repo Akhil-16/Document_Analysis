@@ -1,7 +1,7 @@
 import random
 import string
 
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify
 from flask_cors import CORS, cross_origin
 
 app = Flask(__name__)

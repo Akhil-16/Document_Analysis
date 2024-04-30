@@ -21,3 +21,15 @@ export type FetchedAssignment = {
   uid: string;
   name: string;
 };
+
+export type FetchedSubmission = {
+  uid: string;
+  assignment: string;
+  name: string;
+  email: string;
+  file: string;
+  graded: boolean;
+  grades?: number[];
+  metrics?: string[];
+  remarks?: string[];
+};
