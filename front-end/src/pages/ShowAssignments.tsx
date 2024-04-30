@@ -51,7 +51,8 @@ const ShowAssignments = () => {
                 <th className="border border-black">
                   <Button
                     onClick={() => {
-                      const url = `${window.location.href}/view/assignment?uid=${assignment.uid}`;
+                      const url = `/view/assignment?uid=${assignment.uid}`;
+                      navigate(url);
                     }}
                   >
                     View
