@@ -3,7 +3,14 @@ import { useLocation } from "react-router-dom";
 import { FetchedAssignment } from "../types";
 import LoadingPage from "./LoadingPage";
 import NotFound from "./NotFound";
-import { doc, getDoc } from "firebase/firestore";
+import {
+  collection,
+  doc,
+  getDoc,
+  onSnapshot,
+  query,
+  where,
+} from "firebase/firestore";
 import { db } from "../firebase";
 
 const ViewAssignment = () => {
@@ -27,6 +34,25 @@ const ViewAssignment = () => {
     fetch();
     console.log(uid);
   }, [uid]);
+
+  useEffect(() => {
+    if (!details) {
+      return;
+    }
+
+    const q = query(
+      collection(db, "submissions"),
+      where("assignment", "==", uid),
+    );
+
+    const unsub = onSnapshot(q, (snap) => {
+      snap.docs.forEach((doc) => {
+        console.log(doc);
+      });
+    });
+
+    return unsub;
+  }, [uid, details]);
 
   if (loading) {
     return <LoadingPage />;

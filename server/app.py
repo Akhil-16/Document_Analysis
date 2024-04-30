@@ -13,7 +13,14 @@ app.config["CORS_HEADERS"] = "Content-Type"
 @cross_origin()
 def generate_random():
     return jsonify(
-        {"uid": "".join(random.choices(string.ascii_letters + string.digits, k=6))}
+        {
+            "uid": "".join(
+                random.choices(
+                    string.ascii_letters + string.digits,
+                    k=6,
+                )
+            )
+        }
     )
 
 
