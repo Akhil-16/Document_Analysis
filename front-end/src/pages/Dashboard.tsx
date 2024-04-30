@@ -1,5 +1,17 @@
+import { Button } from "@mui/material";
+import { useAuth } from "../utils";
+
 const Dashboard = () => {
-  return <div>Dashboard</div>;
+  const auth = useAuth();
+
+  return (
+    <>
+      <div>Dashboard</div>
+      <Button onClick={auth.logout} variant="contained">
+        Log Out!
+      </Button>
+    </>
+  );
 };
 
 export default Dashboard;

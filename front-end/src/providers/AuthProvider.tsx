@@ -2,7 +2,12 @@ import React, { useEffect, useState } from "react";
 import { AuthContext } from "../contexts/AuthContext";
 import LoadingPage from "../pages/LoadingPage";
 import { auth } from "../firebase";
-import { User, createUserWithEmailAndPassword } from "firebase/auth";
+import {
+  User,
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+  signOut,
+} from "firebase/auth";
 
 type Props = {
   children: React.ReactNode;
@@ -26,11 +31,17 @@ const AuthProvider = (props: Props) => {
     return createUserWithEmailAndPassword(auth, email, password);
   };
 
+  const login = (email: string, password: string) => {
+    return signInWithEmailAndPassword(auth, email, password);
+  };
+
+  const logout = () => signOut(auth);
+
   const loading = firebaseLoading;
   const isLoggedIn = currentUser !== null;
 
   return (
-    <AuthContext.Provider value={{ isLoggedIn, signUp }}>
+    <AuthContext.Provider value={{ logout, isLoggedIn, signUp, login }}>
       {loading && <LoadingPage />}
       {!loading && props.children}
     </AuthContext.Provider>

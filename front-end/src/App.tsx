@@ -16,8 +16,14 @@ function App() {
           path="/"
           element={auth.isLoggedIn ? <Dashboard /> : <Navigate to={"/login"} />}
         />
-        <Route path="/login" element={<LoginPage />} />
-        <Route path="/sign-up" element={<SignUpPage />} />
+        <Route
+          path="/login"
+          element={auth.isLoggedIn ? <Navigate to={"/"} /> : <LoginPage />}
+        />
+        <Route
+          path="/sign-up"
+          element={auth.isLoggedIn ? <Navigate to={"/"} /> : <SignUpPage />}
+        />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </>

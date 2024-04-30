@@ -78,7 +78,7 @@ const SignUpPage = () => {
         />
         <br />
         <input
-          type="text"
+          type="password"
           value={password}
           className="border border-black"
           onChange={(e: ChangeEvent<HTMLInputElement>) => {
