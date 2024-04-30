@@ -28,11 +28,15 @@ def download_blob(storage_ref):
 
 def process_pdf(fileName):
     return [
-        ("Grammar Check", 100, "Some Remarks"),
-        ("Semantic Relation", 97, "Some Remarks"),
-        ("Literature Review", 99, "Some Remarks"),
-        ("Methodology", 98, "Some Remarks"),
-        ("Misc.", 50, "Some Remarks"),
+        [
+            "Grammar Check",
+            "Semantic Relation",
+            "Lit. Review",
+            "Methodology",
+            "Misc.",
+        ],
+        [100, 99, 22, 12, 33],
+        ["Remark"] * 5,
     ]
 
 
@@ -42,22 +46,28 @@ def grade_assignment(doc):
     grade = process_pdf(fileName)
     print("Got a grade")
     content = {
-        "grade": grade,
+        "remarks": grade[2],
+        "grades": grade[1],
+        "metrics": grade[0],
         "graded": True,
     }
-    collection_watch.unsubscribe()
-    collection_ref = db.collection("graded")
-    doc_ref = collection_ref.document(doc.get("uid"))
-    doc_ref.set(content)
-    print("Updated in db!")
+    return content
 
 
 def on_snapshot(doc_snapshot, _, __):
     for doc in doc_snapshot:
         curr = doc.to_dict()
         curr["uid"] = doc.id
-        grade_assignment(curr)
+        content = grade_assignment(curr)
+        doc_ref = db.collection("submissions").document(doc.id)
+        try:
+            doc_ref.set(content, merge=True)
+            print("Updated!")
+        except Exception as e:
+            print(f"Error updating document {doc.id}: {e}")
 
 
 query = collection_ref.where("graded", "==", False)
 collection_watch = query.on_snapshot(on_snapshot)
+while True:
+    time.sleep(1)
