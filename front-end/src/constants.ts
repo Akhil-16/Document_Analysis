@@ -1,7 +1,7 @@
-import { createMuiTheme } from "@mui/material";
+import { createTheme } from "@mui/material";
 import { purple } from "@mui/material/colors";
 
-export const appTheme = createMuiTheme({
+export const appTheme = createTheme({
   palette: {
     primary: purple,
   },

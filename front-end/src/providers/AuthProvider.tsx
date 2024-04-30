@@ -30,7 +30,7 @@ const AuthProvider = (props: Props) => {
   const isLoggedIn = currentUser !== null;
 
   return (
-    <AuthContext.Provider value={{ isLoggedIn }}>
+    <AuthContext.Provider value={{ isLoggedIn, signUp }}>
       {loading && <LoadingPage />}
       {!loading && props.children}
     </AuthContext.Provider>

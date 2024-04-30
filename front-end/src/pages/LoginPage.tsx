@@ -1,5 +1,11 @@
+import { Link } from "react-router-dom";
+
 const LoginPage = () => {
-  return <div>LoginPage</div>;
+  return (
+    <>
+      <Link to={"/sign-up"}>Sign Up here!</Link>
+    </>
+  );
 };
 
 export default LoginPage;
