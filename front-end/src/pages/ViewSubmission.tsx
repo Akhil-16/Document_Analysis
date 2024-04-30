@@ -5,7 +5,7 @@ import LoadingPage from "./LoadingPage";
 import NotFound from "./NotFound";
 import { doc, getDoc } from "firebase/firestore";
 import { db, storage } from "../firebase";
-import { calcGrade } from "../utils";
+import { calcGrade, roundOff } from "../utils";
 import { getDownloadURL, ref } from "firebase/storage";
 import { Button, Divider, Typography } from "@mui/material";
 import { ImageBg } from "../components/ImageBg";
@@ -92,7 +92,7 @@ const ViewSubmission = () => {
                 Over All Grade ( out of 100 )
               </th>
               <td className="border border-black p-2 text-center">
-                {calcGrade(details.grades!)}
+                {roundOff(calcGrade(details.grades!))}
               </td>
             </tr>
             {[...new Array(5)].map((_, index) => {

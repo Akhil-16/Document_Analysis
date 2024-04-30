@@ -12,8 +12,10 @@ import {
   where,
 } from "firebase/firestore";
 import { db } from "../firebase";
-import { Button } from "@mui/material";
-import { calcGrade } from "../utils";
+import { Button, Divider, Typography } from "@mui/material";
+import { calcGrade, roundOff } from "../utils";
+import SideDrawer from "../components/SideDrawer";
+import { ImageBg } from "../components/ImageBg";
 
 const ViewAssignment = () => {
   const params = useLocation();
@@ -71,42 +73,53 @@ const ViewAssignment = () => {
 
   return (
     <>
-      <div>ViewAssignment</div>
-      <table>
-        <thead>
-          <tr>
-            <th className="border border-black">Name</th>
-            <th className="border border-black">Email</th>
-            <th className="border border-black">Grade</th>
-            <th className="border border-black">action</th>
-          </tr>
-        </thead>
-        <tbody>
-          {submissions
-            .filter((sub) => sub.graded)
-            .map((submission) => {
-              return (
-                <tr key={submission.uid}>
-                  <th className="border border-black">{submission.name}</th>
-                  <th className="border border-black">{submission.email}</th>
-                  <th className="border border-black">
-                    {calcGrade(submission.grades!)}
-                  </th>
-                  <th className="border border-black">
-                    <Button
-                      onClick={() => {
-                        const url = `/view/submission?uid=${submission.uid}`;
-                        navigate(url);
-                      }}
-                    >
-                      View
-                    </Button>
-                  </th>
-                </tr>
-              );
-            })}
-        </tbody>
-      </table>
+      <SideDrawer />
+      <section className="relative ml-[200px] flex h-screen w-[calc(100%-200px)] flex-col items-center justify-center bg-bgColor">
+        <ImageBg />
+        <div className="z-10 flex h-[94%] w-11/12 flex-col rounded-md bg-white p-4 text-black overflow-y-auto">
+          <Typography variant="h4" className="text-center">
+            View Assignments
+          </Typography>
+          <Divider className="my-4" />
+          <table className="w-full">
+            <thead>
+              <tr>
+                <th className="border border-black">Name</th>
+                <th className="border border-black">Email</th>
+                <th className="border border-black">Grade</th>
+                <th className="border border-black">action</th>
+              </tr>
+            </thead>
+            <tbody>
+              {submissions
+                .filter((sub) => sub.graded)
+                .map((submission) => {
+                  return (
+                    <tr key={submission.uid}>
+                      <th className="border border-black">{submission.name}</th>
+                      <th className="border border-black">
+                        {submission.email}
+                      </th>
+                      <th className="border border-black">
+                        {roundOff(calcGrade(submission.grades!))}
+                      </th>
+                      <th className="border border-black">
+                        <Button
+                          onClick={() => {
+                            const url = `/view/submission?uid=${submission.uid}`;
+                            navigate(url);
+                          }}
+                        >
+                          View
+                        </Button>
+                      </th>
+                    </tr>
+                  );
+                })}
+            </tbody>
+          </table>
+        </div>
+      </section>
     </>
   );
 };

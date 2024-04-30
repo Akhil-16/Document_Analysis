@@ -20,3 +20,7 @@ export const objectLength = <T extends Record<PropertyKey, unknown>>(
 export const isUrl = (s: string) => {
   return s.startsWith("https://");
 };
+
+export const roundOff = (x: number) => {
+  return x.toFixed(2);
+};
