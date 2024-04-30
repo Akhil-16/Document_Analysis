@@ -3,6 +3,8 @@ import time
 import firebase_admin
 from firebase_admin import credentials, firestore, storage
 
+from send_mail import send_graded_mail
+
 cred = credentials.Certificate("./credentials.json")
 firebase_admin.initialize_app(
     cred,
@@ -62,6 +64,7 @@ def on_snapshot(doc_snapshot, _, __):
         doc_ref = db.collection("submissions").document(doc.id)
         try:
             doc_ref.set(content, merge=True)
+            send_graded_mail(curr["email"], curr["uid"])
             print("Updated!")
         except Exception as e:
             print(f"Error updating document {doc.id}: {e}")
