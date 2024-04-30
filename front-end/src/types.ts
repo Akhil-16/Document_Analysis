@@ -1,7 +1,8 @@
-import { UserCredential } from "firebase/auth";
+import { User, UserCredential } from "firebase/auth";
 
 export type SMAuthContext = {
   isLoggedIn: boolean;
+  user: User | null;
   signUp: (email: string, password: string) => Promise<UserCredential>;
   login: (email: string, password: string) => Promise<UserCredential>;
   logout: () => Promise<void>;
