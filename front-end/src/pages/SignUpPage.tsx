@@ -3,7 +3,7 @@ import { ChangeEvent, FormEvent, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth, useMessage } from "../utils";
 import { FirebaseError } from "firebase/app";
-import { addDoc, collection, doc, setDoc } from "firebase/firestore";
+import { doc, setDoc } from "firebase/firestore";
 import { db } from "../firebase";
 
 const SignUpPage = () => {
