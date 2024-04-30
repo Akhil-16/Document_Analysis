@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { FetchedAssignment } from "../types";
 import { collection, onSnapshot, query, where } from "firebase/firestore";
-import { useAuth } from "../utils";
+import { useAuth, useMessage } from "../utils";
 import { db } from "../firebase";
 import { Button } from "@mui/material";
 import { useNavigate } from "react-router-dom";
@@ -11,6 +11,7 @@ const ShowAssignments = () => {
 
   const auth = useAuth();
   const navigate = useNavigate();
+  const showMessage = useMessage();
 
   useEffect(() => {
     const q = query(
@@ -38,6 +39,7 @@ const ShowAssignments = () => {
             <th className="border border-black">Name</th>
             <th className="border border-black">uid</th>
             <th className="border border-black">action</th>
+            <th className="border border-black">link</th>
           </tr>
         </thead>
         <tbody>
@@ -49,10 +51,26 @@ const ShowAssignments = () => {
                 <th className="border border-black">
                   <Button
                     onClick={() => {
-                      navigate(`/view/assignment?uid=${assignment.uid}`);
+                      const url = `${window.location.href}/view/assignment?uid=${assignment.uid}`;
                     }}
                   >
                     View
+                  </Button>
+                </th>
+                <th className="border border-black">
+                  <Button
+                    onClick={() => {
+                      const currentUrl = window.location.href;
+                      const exp = new RegExp(
+                        /https?:\/\/([a-zA-Z0-9.]+:[0-9]+)/,
+                      );
+                      const curr = `http://${exp.exec(currentUrl)![1]}/submit/assignment?uid=${assignment.uid}`;
+                      navigator.clipboard.writeText(curr).then(() => {
+                        showMessage("Copied to clipboard!");
+                      });
+                    }}
+                  >
+                    Copy
                   </Button>
                 </th>
               </tr>
