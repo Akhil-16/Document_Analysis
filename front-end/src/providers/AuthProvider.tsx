@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { AuthContext } from "../contexts/AuthContext";
 import LoadingPage from "../pages/LoadingPage";
 import { auth } from "../firebase";
-import { User } from "firebase/auth";
+import { User, createUserWithEmailAndPassword } from "firebase/auth";
 
 type Props = {
   children: React.ReactNode;
@@ -21,6 +21,10 @@ const AuthProvider = (props: Props) => {
 
     return unsub;
   }, []);
+
+  const signUp = (email: string, password: string) => {
+    return createUserWithEmailAndPassword(auth, email, password);
+  };
 
   const loading = firebaseLoading;
   const isLoggedIn = currentUser !== null;
