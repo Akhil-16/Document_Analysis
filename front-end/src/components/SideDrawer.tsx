@@ -45,7 +45,7 @@ const SideDrawer = () => {
             className="w-full flex-grow cursor-pointer text-center text-2xl"
             onClick={() => navigator("/")}
           >
-            U-Drive
+            ScoreMaster
           </Typography>
         </ListItem>
       </List>

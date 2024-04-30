@@ -81,29 +81,35 @@ const ViewAssignment = () => {
             View Assignments
           </Typography>
           <Divider className="my-4" />
-          <table className="w-full">
-            <thead>
-              <tr>
-                <th className="border border-black">Name</th>
-                <th className="border border-black">Email</th>
-                <th className="border border-black">Grade</th>
-                <th className="border border-black">action</th>
+          <table className="w-full overflow-x-hidden overflow-y-scroll">
+            <thead className="w-full">
+              <tr className="w-full">
+                <th className="border border-black w-1/5">#</th>
+                <th className="border border-black w-1/5">Name</th>
+                <th className="border border-black w-1/5">Email</th>
+                <th className="border border-black w-1/5">Grade</th>
+                <th className="border border-black w-1/5">action</th>
               </tr>
             </thead>
             <tbody>
               {submissions
                 .filter((sub) => sub.graded)
-                .map((submission) => {
+                .map((submission, index) => {
                   return (
                     <tr key={submission.uid}>
-                      <th className="border border-black">{submission.name}</th>
-                      <th className="border border-black">
+                      <td className="border border-black p-2 text-center">
+                        {index + 1}
+                      </td>
+                      <td className="border border-black p-2 text-center">
+                        {submission.name}
+                      </td>
+                      <td className="border border-black p-2 text-center">
                         {submission.email}
-                      </th>
-                      <th className="border border-black">
+                      </td>
+                      <td className="border border-black p-2 text-center">
                         {roundOff(calcGrade(submission.grades!))}
-                      </th>
-                      <th className="border border-black">
+                      </td>
+                      <td className="border border-black p-2 text-center">
                         <Button
                           onClick={() => {
                             const url = `/view/submission?uid=${submission.uid}`;
@@ -112,7 +118,7 @@ const ViewAssignment = () => {
                         >
                           View
                         </Button>
-                      </th>
+                      </td>
                     </tr>
                   );
                 })}
