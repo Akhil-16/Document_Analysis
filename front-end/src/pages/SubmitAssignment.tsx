@@ -107,7 +107,7 @@ const SubmitAssignment = () => {
       <>
         <section className="relative flex h-screen w-[calc(100%)] flex-col items-center justify-center bg-bgColor">
           <ImageBg />
-          <div className="z-10 flex h-[94%] w-11/12 lg:max-w-[25%] mx-auto flex-col justify-center rounded-md bg-white p-4 text-black">
+          <div className="z-10 flex w-11/12 lg:max-w-[25%] mx-auto flex-col justify-center rounded-md bg-white p-4 text-black">
             <div className="border border-black p-2">
               <Typography variant="h4" className="text-center">
                 Submitted!
@@ -126,11 +126,11 @@ const SubmitAssignment = () => {
     <>
       <section className="relative flex h-screen w-[calc(100%)] flex-col items-center justify-center bg-bgColor">
         <ImageBg />
-        <div className="z-10 flex h-[94%] w-11/12 lg:max-w-[25%] mx-auto flex-col rounded-md bg-white p-4 text-black">
+        <div className="z-10 flex w-11/12 lg:max-w-[25%] mx-auto flex-col rounded-md bg-white p-4 text-black">
           <Typography variant="h4" className="text-center">
             Submit Assignment
           </Typography>
-          <Divider className="my-4" />
+          <Divider className="my-4 -mb-2" />
           <div className="w-full h-full flex flex-col justify-center items-center">
             <Form
               loading={loading}
