@@ -10,6 +10,7 @@ from nltk.stem import WordNetLemmatizer
 from nltk.tokenize import word_tokenize
 from sklearn.feature_extraction.text import TfidfVectorizer
 
+from extract_abstract import extract_abstract
 from get_page_content import get_paper_texts
 
 nlp = spacy.load("en_core_web_md")
@@ -366,7 +367,15 @@ def evaluate_pdf(fileName: str):
     citations = matching_ref_paragraphs
 
     contents = get_paper_texts(citations[:2])
-    print(contents)
+
+    total = 0
+    for index, content in enumerate(contents):
+        abstract = extract_abstract(content)
+        total += scoremaster.calculate_semantic_similarity(
+            abstract, list_of_literature_reviews[index]
+        )
+    total /= len(contents)
+    print(total)
 
 
 if __name__ == "__main__":
