@@ -9,6 +9,8 @@ from nltk.corpus import stopwords
 from nltk.stem import WordNetLemmatizer
 from nltk.tokenize import word_tokenize
 from sklearn.feature_extraction.text import TfidfVectorizer
+from tabula import read_pdf
+from tabulate import tabulate
 
 from extract_abstract import extract_abstract
 from get_page_content import get_paper_texts
@@ -319,6 +321,49 @@ class Scoremaster:
 
         return paragraphs
 
+    def table_of_images(self, fileName):
+        for x, y in self.toc_pairs:
+            x = x.lower()
+            if x == "list of figures":
+
+                page_no_for_table_of_Images = y
+                df = read_pdf(fileName, pages=page_no_for_table_of_Images)
+                df_pandas = df[0]
+                last_two_columns = df_pandas.iloc[:, -2:].values.tolist()
+                # Separate the last two columns into separate lists
+                Image_page_nos = df_pandas.iloc[:, -1].values.tolist()
+                Captions = df_pandas.iloc[:, -2].values.tolist()
+                return Image_page_nos, Captions
+
+
+def calculate_score(x, y):
+    ideal_range = (3, 5)  # Ideal range for both x and y
+
+    # Check if values are within the ideal range
+    print(x, y)
+    print(type(x), type(y))
+    if ideal_range[0] <= x <= ideal_range[1] and ideal_range[0] <= y <= ideal_range[1]:
+        # If both x and y are exactly 4, assign the highest score
+        if x == 4 and y == 4:
+            return 100
+        else:
+            # Calculate score based on the distance from 4
+            x_distance = abs(4 - x)
+            y_distance = abs(4 - y)
+            total_distance = x_distance + y_distance
+            # Calculate score as a percentage of maximum score (100)
+            score = max(0, 100 - total_distance * 10)
+            return score
+    else:
+        # Deduct marks if values are outside the ideal range
+        deduction = 0
+        if x < ideal_range[0] or x > ideal_range[1]:
+            deduction += abs(x - 4) * 10
+        if y < ideal_range[0] or y > ideal_range[1]:
+            deduction += abs(y - 4) * 10
+        score = max(0, 100 - deduction)
+        return score
+
 
 def evaluate_pdf(fileName: str):
     list2 = [
@@ -372,8 +417,11 @@ def evaluate_pdf(fileName: str):
             abstract, list_of_literature_reviews[index]
         )
     total /= len(contents)
+    Image_page_no, Captions = scoremaster.table_of_images(fileName)
+    table_score = calculate_score(len(Image_page_no), len(Captions))
+    print(table_score)
 
-    return (grammer_score[0], semantic_relation, total)
+    return (grammer_score[0], semantic_relation, total, table_score)
 
 
 if __name__ == "__main__":

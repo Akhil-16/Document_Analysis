@@ -30,7 +30,7 @@ def download_blob(storage_ref):
 
 
 def process_pdf(fileName):
-    grammar, semantic, lit = evaluate_pdf(fileName)
+    grammar, semantic, lit, table_score = evaluate_pdf(fileName)
     return [
         [
             "Grammar Check",
@@ -39,7 +39,7 @@ def process_pdf(fileName):
             "Methodology",
             "Misc.",
         ],
-        [grammar, semantic, lit, 90, 100],
+        [grammar, semantic, lit, table_score, 100],
         ["Remark"] * 5,
     ]
 
