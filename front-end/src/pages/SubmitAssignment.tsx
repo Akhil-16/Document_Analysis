@@ -1,5 +1,5 @@
 import { ChangeEvent, FormEvent, useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { FetchedAssignment } from "../types";
 import LoadingPage from "./LoadingPage";
 import NotFound from "./NotFound";
@@ -40,6 +40,7 @@ const SubmitAssignment = () => {
   const [submitted, setsubmitted] = useState(false);
 
   const showMessage = useMessage();
+  const navigate = useNavigate();
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const selectedFile = e.target.files && e.target.files[0];
@@ -115,6 +116,14 @@ const SubmitAssignment = () => {
               <Typography variant="h6" className="text-center">
                 You'll be notified by a mail whenever it's graded!
               </Typography>
+              You can view your result after the grading is done on{" "}
+              <Button
+                onClick={() => {
+                  navigate(`/view/assignment?uid=${uid}`);
+                }}
+              >
+                here
+              </Button>
             </div>
           </div>
         </section>

@@ -29,19 +29,74 @@ def download_blob(storage_ref):
     return destination_file_name
 
 
+def get_remark(parameter, score):
+    if parameter == "Grammar Check":
+        if score >= 90:
+            return "Your grammar is impeccable!"
+        elif score >= 70:
+            return "Your grammar is good, but there is room for improvement."
+        elif score >= 50:
+            return "Your grammar needs some attention."
+        else:
+            return "Your grammar is atrocious!"
+    elif parameter == "Semantic Relation":
+        if score >= 90:
+            return "Your semantic relations are very clear and well-established."
+        elif score >= 70:
+            return (
+                "Your semantic relations are understandable, but could be more precise."
+            )
+        elif score >= 50:
+            return "Your semantic relations need improvement."
+        else:
+            return "Your semantic relations are unclear or inconsistent."
+    elif parameter == "Lit. Review":
+        if score >= 90:
+            return "Your literature review is comprehensive and insightful."
+        elif score >= 70:
+            return "Your literature review is adequate, but missing some key points."
+        elif score >= 50:
+            return "Your literature review needs significant improvement."
+        else:
+            return "Your literature review is severely lacking."
+    elif parameter == "Methodology":
+        if score >= 90:
+            return "Your methodology is robust and well-designed."
+        elif score >= 70:
+            return (
+                "Your methodology is acceptable, but could be more detailed or precise."
+            )
+        elif score >= 50:
+            return "Your methodology needs improvement or clarification."
+        else:
+            return "Your methodology is fundamentally flawed or inadequate."
+    elif parameter == "Misc.":
+        if score >= 90:
+            return "Your miscellaneous section is exceptional!"
+        elif score >= 70:
+            return "Your miscellaneous section is good, but could use some refinement."
+        elif score >= 50:
+            return "Your miscellaneous section needs attention and improvement."
+        else:
+            return "Your miscellaneous section is lacking coherence or relevance."
+    else:
+        return "Invalid parameter."
+
+
 def process_pdf(fileName):
     grammar, semantic, lit, table_score = evaluate_pdf(fileName)
-    return [
-        [
-            "Grammar Check",
-            "Semantic Relation",
-            "Lit. Review",
-            "Methodology",
-            "Misc.",
-        ],
-        [grammar, semantic, lit, table_score, 100],
-        ["Remark"] * 5,
+    parameters = [
+        "Grammar Check",
+        "Semantic Relation",
+        "Lit. Review",
+        "Methodology",
+        "Misc.",
     ]
+    scores = [grammar, semantic, lit, table_score, 100]
+    remarks = []
+    for i in range(5):
+        remarks.append(get_remark(parameters[i], scores[i]))
+    return [parameters, scores, remarks]
 
 
 def grade_assignment(doc):
