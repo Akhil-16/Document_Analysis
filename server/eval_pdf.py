@@ -296,6 +296,7 @@ def evaluate_pdf(fileName: str):
 
     for x in range(len(scoremaster.lit_paras)):
         lit_keywords.append(scoremaster.extract_keywords(scoremaster.lit_paras[x]))
+        print(scoremaster.lit_paras[x])
 
     abs_intro_similarity = scoremaster.calculate_semantic_similarity(
         abstract_text, intro_text
