@@ -342,7 +342,6 @@ def evaluate_pdf(fileName: str):
     conclusion = scoremaster.extract_conclusion_text()
     list_of_literature_reviews = scoremaster.extract_lit_text()
     grammer_score = scoremaster.analyze_text()
-    print(grammer_score)
     lit_text = "".join(list_of_literature_reviews)
     refrence_page_no = scoremaster.refrences()
     for x in range(len(scoremaster.lit_paras)):
@@ -355,8 +354,6 @@ def evaluate_pdf(fileName: str):
     intro_con = scoremaster.calculate_semantic_similarity(intro_text, conclusion)
     semantic_relation = abs_intro_similarity + abs_con_sim + intro_con
     semantic_relation /= 3
-
-    print(semantic_relation)
 
     numbers = scoremaster.extract_numbers(lit_text)
 
@@ -375,7 +372,8 @@ def evaluate_pdf(fileName: str):
             abstract, list_of_literature_reviews[index]
         )
     total /= len(contents)
-    print(total)
+
+    return (grammer_score[0], semantic_relation, total)
 
 
 if __name__ == "__main__":

@@ -3,6 +3,7 @@ import time
 import firebase_admin
 from firebase_admin import credentials, firestore, storage
 
+from eval_pdf import evaluate_pdf
 from send_mail import send_graded_mail
 
 cred = credentials.Certificate("./credentials.json")
@@ -29,6 +30,7 @@ def download_blob(storage_ref):
 
 
 def process_pdf(fileName):
+    grammar, semantic, lit = evaluate_pdf(fileName)
     return [
         [
             "Grammar Check",
@@ -37,7 +39,7 @@ def process_pdf(fileName):
             "Methodology",
             "Misc.",
         ],
-        [100, 99, 22, 12, 33],
+        [grammar, semantic, lit, 90, 100],
         ["Remark"] * 5,
     ]
 
