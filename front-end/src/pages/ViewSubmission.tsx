@@ -49,10 +49,19 @@ const ViewSubmission = () => {
   if (!details.graded) {
     return (
       <>
-        <div>
-          This submission is being graded. You will get an email once it has
-          been graded
-        </div>
+        <section className="relative flex h-screen w-[calc(100%)] flex-col items-center justify-center bg-bgColor">
+          <ImageBg />
+          <div className="z-10 flex h-[94%] w-11/12 lg:max-w-[55%] mx-auto flex-col justify-center rounded-md bg-white p-4 text-black">
+            <div className="border border-black p-2">
+              <Typography variant="h4" className="text-center">
+                Grading...
+              </Typography>
+              <Typography variant="h6" className="text-center">
+                You'll be notified by a mail whenever it's graded!
+              </Typography>
+            </div>
+          </div>
+        </section>
       </>
     );
   }
@@ -66,7 +75,7 @@ const ViewSubmission = () => {
             View Submission
           </Typography>
           <Divider className="my-4 w-full" />
-          <table className="w-full">
+          <table className="w-[80%] mx-auto">
             <tr>
               <th className="border border-black w-[15%] p-2">Name</th>
               <td className="border border-black p-2 text-center">
