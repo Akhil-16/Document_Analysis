@@ -13,9 +13,10 @@ import {
 } from "firebase/firestore";
 import { db } from "../firebase";
 import { Button, Divider, Typography } from "@mui/material";
-import { calcGrade, roundOff } from "../utils";
+import { calcGrade, roundOff, useMessage } from "../utils";
 import SideDrawer from "../components/SideDrawer";
 import { ImageBg } from "../components/ImageBg";
+import { useHistory } from "react-router-dom";
 
 const ViewAssignment = () => {
   const params = useLocation();
@@ -26,6 +27,7 @@ const ViewAssignment = () => {
   const [submissions, setsubmissions] = useState<FetchedSubmission[]>([]);
 
   const navigate = useNavigate();
+  const showMessage = useMessage();
 
   useEffect(() => {
     const fetch = async () => {
@@ -76,7 +78,7 @@ const ViewAssignment = () => {
       <SideDrawer />
       <section className="relative ml-[200px] flex h-screen w-[calc(100%-200px)] flex-col items-center justify-center bg-bgColor">
         <ImageBg />
-        <div className="z-10 flex h-[94%] w-11/12 flex-col rounded-md bg-white p-4 text-black overflow-y-auto">
+        <div className="z-10 flex max-h-[94%] w-11/12 flex-col rounded-md bg-white p-4 text-black overflow-y-auto">
           <Typography variant="h4" className="text-center">
             View Assignments
           </Typography>
@@ -124,6 +126,29 @@ const ViewAssignment = () => {
                 })}
             </tbody>
           </table>
+          <div className="mt-4 w-full flex justify-between items-center">
+            <Button
+              onClick={() => {
+                navigate("/view/assignments");
+              }}
+              variant="outlined"
+            >
+              Go Back
+            </Button>
+            <Button
+              onClick={() => {
+                const currentUrl = window.location.href;
+                const exp = new RegExp(/https?:\/\/([a-zA-Z0-9.]+:[0-9]+)/);
+                const curr = `http://${exp.exec(currentUrl)![1]}/submit/assignment?uid=${uid}`;
+                navigator.clipboard.writeText(curr).then(() => {
+                  showMessage("Copied to clipboard!");
+                });
+              }}
+              variant="outlined"
+            >
+              Copy URL
+            </Button>
+          </div>
         </div>
       </section>
     </>

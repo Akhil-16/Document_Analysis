@@ -37,7 +37,7 @@ const ShowAssignments = () => {
       <SideDrawer />
       <section className="relative ml-[200px] flex h-screen w-[calc(100%-200px)] flex-col items-center justify-center bg-bgColor">
         <ImageBg />
-        <div className="z-10 flex h-[94%] w-11/12 flex-col rounded-md bg-white p-4 text-black">
+        <div className="z-10 flex max-h-[94%] w-11/12 flex-col rounded-md bg-white py-8 px-4 text-black">
           <Typography variant="h4" className="text-center">
             View Assignments
           </Typography>
