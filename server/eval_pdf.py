@@ -10,6 +10,8 @@ from nltk.stem import WordNetLemmatizer
 from nltk.tokenize import word_tokenize
 from sklearn.feature_extraction.text import TfidfVectorizer
 
+from get_page_content import get_paper_texts
+
 nlp = spacy.load("en_core_web_md")
 nltk.download("punkt")
 nltk.download("stopwords")
@@ -157,6 +159,8 @@ class Scoremaster:
             for index, paragraph in enumerate(self.lit_paras):
                 self.lit_paras[index] = paragraph.replace("\n", "")
             self.lit_paras = [p for p in self.lit_paras if p.strip()]
+            return self.lit_paras
+
         else:
             print("Literature Review section not found in table of contents.")
 
@@ -243,7 +247,7 @@ class Scoremaster:
                 print(f"Readability: {readability} ({readability_score})")
                 print(f"Grammar quality: {grammar_quality} ({grammar_score})")
                 print()
-        return average
+        return average, grammar_quality, readability
 
     def extract_keywords(self, text, num_keywords=5):
         def preprocess_text(text):
@@ -269,6 +273,51 @@ class Scoremaster:
         similarity = doc1.similarity(doc2)
         return similarity * 100
 
+    def extract_numbers(self, text):
+        # Regular expression pattern to match numbers within square brackets
+        pattern = r"\[(\d+)\]"
+
+        # Find all matches of the pattern in the text
+        matches = re.findall(pattern, text)
+
+        # Convert matched numbers from strings to integers and store them in a list
+        numbers = [int(match) for match in matches]
+
+        return numbers
+
+    def refrences(self):
+        page_no_ref = None
+        for x, y in self.toc_pairs:
+            x = x.lower()
+            if x == "references":
+                page_no_ref = y
+                break
+        return page_no_ref
+
+    def extract_paragraphs_with_numbers(self, pdf_file, page_number, numbers):
+        paragraphs = []
+
+        with open(pdf_file, "rb") as file:
+            reader = PyPDF2.PdfReader(file)
+            # Adjusting for 0-based indexing
+            page = reader.pages[page_number - 1]
+
+            text = page.extract_text()
+
+            lines = text.split("\n")
+
+            for line in lines:
+                # Extract the starting number from the line
+                match = re.match(r"^\d+", line)
+                if match:
+                    starting_number = int(match.group())
+
+                    # Check if the starting number matches any number in the given list
+                    if starting_number in numbers:
+                        paragraphs.append(line)
+
+        return paragraphs
+
 
 def evaluate_pdf(fileName: str):
     list2 = [
@@ -282,32 +331,42 @@ def evaluate_pdf(fileName: str):
         "References",
     ]
     lit_keywords = []
-    scoremaster = Scoremaster(fileName)
+    pdf_file = fileName
+    scoremaster = Scoremaster(pdf_file)
     scoremaster.extract_table_of_contents()
     scoremaster.Checking_Chronology(list2)
     intro_text = scoremaster.extract_intro_text()
     scoremaster.extract_ps_text()
     abstract_text = scoremaster.extract_abs_text()
     conclusion = scoremaster.extract_conclusion_text()
-    scoremaster.extract_lit_text()
+    list_of_literature_reviews = scoremaster.extract_lit_text()
     grammer_score = scoremaster.analyze_text()
-
-    print(f"Grammar Score: {grammer_score}")
-
+    print(grammer_score)
+    lit_text = "".join(list_of_literature_reviews)
+    refrence_page_no = scoremaster.refrences()
     for x in range(len(scoremaster.lit_paras)):
         lit_keywords.append(scoremaster.extract_keywords(scoremaster.lit_paras[x]))
-        print(scoremaster.lit_paras[x])
 
     abs_intro_similarity = scoremaster.calculate_semantic_similarity(
         abstract_text, intro_text
     )
     abs_con_sim = scoremaster.calculate_semantic_similarity(abstract_text, conclusion)
     intro_con = scoremaster.calculate_semantic_similarity(intro_text, conclusion)
-
     semantic_relation = abs_intro_similarity + abs_con_sim + intro_con
     semantic_relation /= 3
 
-    print(f"semantic_relation: {semantic_relation}")
+    print(semantic_relation)
+
+    numbers = scoremaster.extract_numbers(lit_text)
+
+    matching_ref_paragraphs = scoremaster.extract_paragraphs_with_numbers(
+        pdf_file, refrence_page_no, numbers
+    )
+
+    citations = matching_ref_paragraphs
+
+    contents = get_paper_texts(citations[:2])
+    print(contents)
 
 
 if __name__ == "__main__":
