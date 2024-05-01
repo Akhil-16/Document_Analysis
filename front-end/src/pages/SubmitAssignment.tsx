@@ -38,6 +38,7 @@ const SubmitAssignment = () => {
   const [loading, setloading] = useState(false);
   const [details, setDetails] = useState<FetchedAssignment | null>(null);
   const [submitted, setsubmitted] = useState(false);
+  const [subId, setSubId] = useState("");
 
   const showMessage = useMessage();
   const navigate = useNavigate();
@@ -77,13 +78,14 @@ const SubmitAssignment = () => {
       console.log(details);
       const storageRef = ref(storage, `${details!.uid}/${"assignment"}.pdf`);
       const resp = await uploadBytes(storageRef, file);
-      await addDoc(collection(db, "submissions"), {
+      const docRef = await addDoc(collection(db, "submissions"), {
         assignment: details!.uid,
         file: resp.metadata.fullPath,
         name,
         email,
         graded: false,
       });
+      setSubId(docRef.id);
       showMessage("Uploaded successfully!", "success");
       setsubmitted(true);
     } catch (err) {
@@ -119,7 +121,7 @@ const SubmitAssignment = () => {
               You can view your result after the grading is done on{" "}
               <Button
                 onClick={() => {
-                  navigate(`/view/assignment?uid=${uid}`);
+                  navigate(`/view/submission?uid=${subId}`);
                 }}
               >
                 here

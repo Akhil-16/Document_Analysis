@@ -51,7 +51,7 @@ const ViewSubmission = () => {
       <>
         <section className="relative flex h-screen w-[calc(100%)] flex-col items-center justify-center bg-bgColor">
           <ImageBg />
-          <div className="z-10 flex h-[94%] w-11/12 lg:max-w-[55%] mx-auto flex-col justify-center rounded-md bg-white p-4 text-black">
+          <div className="z-10 flex w-11/12 lg:max-w-[55%] mx-auto flex-col justify-center rounded-md bg-white p-4 text-black">
             <div className="border border-black p-2">
               <Typography variant="h4" className="text-center">
                 Grading...
