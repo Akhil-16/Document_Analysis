@@ -20,11 +20,36 @@ function App() {
           path="/"
           element={auth.isLoggedIn ? <Dashboard /> : <Navigate to={"/login"} />}
         />
-        <Route path="/view/assignment" element={<ViewAssignment />} />
-        <Route path="/view/submission" element={<ViewSubmission />} />
-        <Route path="/create/assignment" element={<CreateAssignemnt />} />
-        <Route path="/view/assignments" element={<ShowAssignments />} />
-        <Route path="/submit/assignment" element={<SubmitAssignment />} />
+        <Route
+          path="/view/assignment"
+          element={
+            auth.isLoggedIn ? <ViewAssignment /> : <Navigate to={"/login"} />
+          }
+        />
+        <Route
+          path="/view/submission"
+          element={
+            auth.isLoggedIn ? <ViewSubmission /> : <Navigate to={"/login"} />
+          }
+        />
+        <Route
+          path="/create/assignment"
+          element={
+            auth.isLoggedIn ? <CreateAssignemnt /> : <Navigate to={"/login"} />
+          }
+        />
+        <Route
+          path="/view/assignments"
+          element={
+            auth.isLoggedIn ? <ShowAssignments /> : <Navigate to={"/login"} />
+          }
+        />
+        <Route
+          path="/submit/assignment"
+          element={
+            auth.isLoggedIn ? <SubmitAssignment /> : <Navigate to={"/login"} />
+          }
+        />
         <Route
           path="/login"
           element={
