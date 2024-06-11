@@ -407,22 +407,31 @@ def evaluate_pdf(fileName: str):
     )
 
     citations = matching_ref_paragraphs
+    print("citations are",citations)
 
     contents = get_paper_texts(citations[:2])
+    
+    # print("Executed sucessfully",contents)
 
     total = 0
-    for index, content in enumerate(contents):
-        abstract = extract_abstract(content)
-        total += scoremaster.calculate_semantic_similarity(
-            abstract, list_of_literature_reviews[index]
-        )
-    total /= len(contents)
-    Image_page_no, Captions = scoremaster.table_of_images(fileName)
-    table_score = calculate_score(len(Image_page_no), len(Captions))
-    print(table_score)
+    if len(contents) !=0:
+        for index, content in enumerate(contents):
+            abstract = extract_abstract(content)
+            total += scoremaster.calculate_semantic_similarity(
+                abstract, list_of_literature_reviews[index]
+            )
+        total /= len(contents)
+        Image_page_no, Captions = scoremaster.table_of_images(fileName)
+        table_score = calculate_score(len(Image_page_no), len(Captions))
+        print(table_score)
 
-    return (grammer_score[0], semantic_relation, total, table_score)
+        return (grammer_score[0], semantic_relation, total, table_score)
+    else:
+        table_score = calculate_score(len(Image_page_no), len(Captions))
+        return(grammer_score[0],semantic_relation,0,table_score)
+        
 
 
 if __name__ == "__main__":
+
     evaluate_pdf("./downloaded/Introduction1.pdf")
